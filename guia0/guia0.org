@@ -1,0 +1,99 @@
+
+* funciones utiles
+** instalacion haskell mode
+#+BEGIN_SRC emacs-lisp
+  ;; Primero, eliminamos el paquete si está instalado
+  (let ((pkg-desc (cadr (assoc 'haskell-mode package-alist))))
+     (when pkg-desc
+      (package-delete pkg-desc t)))  ; El argumento t fuerza la eliminación sin preguntar
+
+  ;; Luego, instalamos el paquete
+  (package-install 'haskell-mode)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((haskell . t)))
+#+END_SRC
+
+#+RESULTS:
+
+* Ejercicio 1
+Dar el tipo y describir el comportamiento de las siguientes funciones del módulo Prelude de Haskell:
+
+null head tail init last take drop (++) concat reverse elem
+** null
+#+BEGIN_SRC haskell :results output
+  main = print (:t null)
+#+END_SRC
+
+#+RESULTS:
+: <interactive>:3:16: error:
+:     Variable not in scope: t :: (t0 a0 -> Bool) -> [a1]
+** haed
+#+BEGIN_SRC haskell :results output
+  print (:t head)
+#+END_SRC
+
+#+RESULTS:
+: <interactive>:3:9: error:
+:     Variable not in scope: t :: ([a0] -> a0) -> [a1]
+* Ejercicio 2
+Definir las siguientes funciones:
+a. valorAbsoluto :: Float → Float, que dado un número devuelve su valor absoluto.
+d. cantDivisoresPrimos :: Int → Int, que dado un entero positivo devuelve la cantidad de divisores primos.
+
+#+BEGIN_SRC haskell :results output
+   -- Función valorAbsoluto: devuelve el valor absoluto de un número.
+   valorAbsoluto :: a -> a
+   valorAbsoluto x = if x >= 0 then x else -x
+   valorAbsoluto (-7)
+#+END_SRC
+
+#+RESULTS:
+: 7
+
+b. bisiesto :: Int → Bool, que dado un número que representa un año, indica si el mismo es bisiesto.
+#+BEGIN_SRC haskell :results output
+  -- Función bisiesto: determina si un año es bisiesto.
+  esSecular :: Int -> Bool
+  esSecular x = if mod x 100 == 0 then (if mod x 400 == 0 then True else False) else True
+
+  bisiesto :: Int -> Bool
+  bisiesto x = if mod x 4 == 0 then (esSecular x) else False   -- Reemplaza 'undefined' con tu implementación
+
+  bisiesto 2020
+  bisiesto 200
+  bisiesto 300
+  bisiesto 400
+#+END_SRC
+
+#+RESULTS:
+: True
+: False
+: False
+: True
+
+c. factorial :: Int → Int, definida únicamente para enteros positivos, que computa el factorial.
+#+BEGIN_SRC haskell :results output
+    -- Función factorial: computa el factorial de un entero positivo.
+    :{
+    factorial :: Int -> Int
+    factorial 1 = 1
+    factorial x = x * factorial (x-1)
+    :}
+    factorial 2
+    factorial 3
+#+END_SRC
+
+#+RESULTS:
+: 2
+: 6
+
+#+BEGIN_SRC haskell :results output
+  -- Función cantDivisoresPrimos: cuenta la cantidad de divisores primos de un entero positivo.
+  :{
+  cantDivisoresPrimos1 :: Int -> Int -> Int
+  cantDivisoresPrimos1 x y = if mod x y == 0
+  cantDivisoresPrimos :: Int -> Int
+  cantDivisoresPrimos x = cantDivisoresPrimos1 x x
+  :}
+#+END_SRC
