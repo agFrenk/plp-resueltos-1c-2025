@@ -114,7 +114,6 @@ d. cantDivisoresPrimos :: Int → Int, que dado un entero positivo devuelve la c
 
 #+END_SRC
 
-#+RESULTS:
 #+begin_src haskell
 2
 2
