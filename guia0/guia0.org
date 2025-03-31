@@ -1,29 +1,11 @@
 
-* funciones utiles
-** instalacion haskell mode
+* Guia 0
+** funciones utiles
 #+BEGIN_SRC emacs-lisp
-  ;; Primero, eliminamos el paquete si está instalado
-  (let ((pkg-desc (cadr (assoc 'haskell-mode package-alist))))
-     (when pkg-desc
-      (package-delete pkg-desc t)))  ; El argumento t fuerza la eliminación sin preguntar
-
-  ;; Luego, instalamos el paquete
-  (package-install 'haskell-mode)
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((haskell . t)))
-
-  (defun replace-results-line ()
-  "Reemplaza '*RESULTS:*' por '*RESULTS:*' en el buffer actual."
-  (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (while (search-forward "*RESULTS:*" nil t)
-      (replace-match "*RESULTS:*" nil nil))))
+  (load-file "../funcionesUtiles.el")
 
 #+END_SRC
-
-* Ejercicio 1
+** Ejercicio 1
 Dar el tipo y describir el comportamiento de las siguientes funciones del módulo Prelude de Haskell:
 
 null head tail init last take drop (++) concat reverse elem
@@ -43,7 +25,7 @@ head)
 *RESULTS:*
 : <interactive>:3:9: error:
 :     Variable not in scope: t :: ([a0] -> a0) -> [a1]
-* Ejercicio 2
+** Ejercicio 2
 Definir las siguientes funciones:
 a. valorAbsoluto :: Float → Float, que dado un número devuelve su valor absoluto.
 
@@ -128,3 +110,55 @@ d. cantDivisoresPrimos :: Int → Int, que dado un entero positivo devuelve la c
 3
 1
 #+end_src
+** Ejercicio 3
+Contamos con los tipos *Maybe* y *Either* definidos como sigue:
+#+BEGIN_SRC haskell :results output code
+    :{
+      data Maybe a = Nothing | Just a
+      data Either a b = Left a | Right b
+    :}
+#+END_SRC
+a. Definir la función inverso :: Float → Maybe Float que dado un número devuelve su inverso multiplicativo
+si está definido, o Nothing en caso contrario.
+
+#+BEGIN_SRC haskell :results output
+  :{
+   data Maybe a = Nothing | Just a deriving (Show)
+   data Either a b = Left a | Right b deriving (Show)
+
+   inverso:: Float -> Maybe Float
+   inverso 0 = Nothing
+   inverso x = Just (1/x)
+  :}
+
+  inverso 0
+  inverso 8
+#+END_SRC
+
+*RESULTS:*
+: Nothing
+: Just 0.125
+
+b. Definir la función aEntero :: Either Int Bool → Int que convierte a entero una expresión que puede ser
+booleana o entera. En el caso de los booleanos, el entero que
+corresponde es 0 para False y 1 para True.
+#+BEGIN_SRC haskell :results output
+  :{
+   data Maybe a = Nothing | Just a deriving (Show)
+   data Either a b = Left a | Right b deriving (Show)
+
+   aEntero:: Either Int Bool -> Int
+   aEntero (Right True) = 1
+   aEntero (Right False) = 0
+   aEntero (Left x) = x
+  :}
+
+  aEntero (Left 8)
+  aEntero (Right True)
+  aEntero (Right False)
+#+END_SRC
+
+*RESULTS:*
+: 8
+: 1
+: 0

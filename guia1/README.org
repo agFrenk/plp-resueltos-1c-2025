@@ -1,0 +1,172 @@
+* Guia 1
+** funciones utiles
+#+BEGIN_SRC emacs-lisp
+  (load-file "../funcionesUtiles.el")
+#+END_SRC
+** Ejericio1
+
+
+Considerar las siguientes definiciones de funciones:
+1) Cuál es el tipo de cada función? (Suponer que todos los números son de tipo Float).
+
+El tipo esta especificado dentro de cada funcion
+max2 (x, y)
+#+BEGIN_SRC haskell :results output
+  :{
+    max2:: (Float, Float) -> Float
+    max2 (x, y) | x >= y = x
+                | otherwise = y
+  :}
+  max2 (2, 4)
+#+END_SRC
+
+#+RESULTS:
+: 4.0
+
+normaVectorial (x, y)
+#+BEGIN_SRC haskell :results output
+  :{
+    normaVectorial:: (Float, Float) -> Float
+    normaVectorial (x, y) = sqrt (x^2 + y^2)
+  :}
+  normaVectorial (2, 2)
+#+END_SRC
+
+#+RESULTS:
+: 2.828427
+
+subtract
+#+BEGIN_SRC haskell :results output
+  :{
+    subtract:: Float -> Float -> Float
+    subtract = flip (-)
+  :}
+  subtract 8 2
+#+END_SRC
+
+#+RESULTS:
+: -6.0
+
+predecesor
+#+BEGIN_SRC haskell :results output
+  :{
+     subtract:: Float -> Float -> Float
+     subtract = flip (-)
+
+     predecesor:: Float -> Float
+     predecesor = subtract 1
+
+  :}
+  predecesor 8
+#+END_SRC
+
+#+RESULTS:
+: 7.0
+
+
+
+evaluarEnCero
+
+#+BEGIN_SRC haskell :results output
+    :{
+      subtract:: Float -> Float -> Float
+      subtract = flip (-)
+
+      predecesor:: Float -> Float
+      predecesor = subtract 1
+
+      evaluarEnCero:: (Float -> Float) -> Float
+      evaluarEnCero = \f -> f 0
+
+    :}
+    evaluarEnCero(predecesor)
+#+END_SRC
+
+#+RESULTS:
+: -1.0
+
+dosVeces
+#+BEGIN_SRC haskell :results output
+  :{
+    dosVeces:: (Float -> Float) -> (Float -> Float)
+    dosVeces = \f -> f . f
+
+    sumarDos:: Float -> Float
+    sumarDos x = x + 2
+  :}
+
+   dosVeces sumarDos 5
+#+END_SRC
+
+#+RESULTS:
+: 9.0
+
+flipAll = map flip
+#+BEGIN_SRC haskell :results output
+  :{
+     flipAll:: [a -> b -> c] -> [b -> a -> c]
+     flipAll = map flip
+
+  :}
+   #+END_SRC
+
+   #+RESULTS:
+
+
+
+
+flipRaro = flip flip
+#+BEGIN_SRC haskell :results output
+  :{
+    flipRaro:: e -> (d -> e -> f) -> d -> f
+    flipRaro = flip flip
+
+  :}
+#+END_SRC
+
+#+RESULTS:
+
+ii. Indicar cuáles de las funciones anteriores no están curricadas. Para cada una de ellas, denir la función
+curricada correspondiente. Recordar dar el tipo de la función.
+** Ejercicio 2
+i. Definir la función curry, que dada una función de dos argumentos,
+devuelve su equivalente currificada.
+
+#+BEGIN_SRC haskell :results output
+:{
+curry :: ((a,b) -> c) -> a -> b -> c
+curry f x y = f (x,y)
+
+-- curry f = \x -> \y -> f (x,y)
+-- curry f = \x y -> f (x,y)
+:}
+
+#+END_SRC
+
+ii. Dfnir la función uncurry, que dada una función curricada de dos argumentos, devuelve su versión no
+curricada equivalente. Es la inversa de la anterior.
+#+begin_src haskell :results output
+{:
+uncurry :: (a -> b -> c) -> (a,b) -> c
+uncurry f = \(x,y) -> f x y
+}:
+#+end_src
+
+iii. Se podría definir una función curry^n, que tome una función de un número arbitrario de argumentos y
+devuelva su versión currificada?
+*Sugerencia*: pensar cuál sería el tipo de la función
+** Ejercicio 3
+Ejercicio 3 ⋆
+i. Redefinir usando *foldr* las funciones *sum*, *elem*, *(++)*, *filter* y *map*.
+
+
+ii. Denir la función mejorSegún :: (a -> a -> Bool) -> [a] -> a, que devuelve el máximo elemento
+de la lista según una función de comparación, utilizando foldr1. Por ejemplo, maximum = mejorSegún
+(>).
+iii. Denir la función sumasParciales :: Num a => [a] -> [a], que dada una lista de números devuelve
+otra de la misma longitud, que tiene en cada posición la suma parcial de los elementos de la lista original
+desde la cabeza hasta la posición actual. Por ejemplo, sumasParciales [1,4,-1,0,5] ; [1,5,4,4,9].
+iv. Denir la función sumaAlt, que realiza la suma alternada de los elementos de una lista. Es decir, da como
+resultado: el primer elemento, menos el segundo, más el tercero, menos el cuarto, etc. Usar foldr.
+v. Hacer lo mismo que en el punto anterior, pero en sentido inverso (el último elemento menos el anteúltimo,
+etc.). Pensar qué esquema de recursión conviene usar en este caso.
