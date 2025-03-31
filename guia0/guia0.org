@@ -12,9 +12,16 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((haskell . t)))
-#+END_SRC
 
-#+RESULTS:
+  (defun replace-results-line ()
+  "Reemplaza '*RESULTS:*' por '*RESULTS:*' en el buffer actual."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (search-forward "*RESULTS:*" nil t)
+      (replace-match "*RESULTS:*" nil nil))))
+
+#+END_SRC
 
 * Ejercicio 1
 Dar el tipo y describir el comportamiento de las siguientes funciones del módulo Prelude de Haskell:
@@ -25,7 +32,7 @@ null)
   main = print (:t null)
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : <interactive>:3:16: error:
 :     Variable not in scope: t :: (t0 a0 -> Bool) -> [a1]
 head)
@@ -33,7 +40,7 @@ head)
   print (:t head)
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : <interactive>:3:9: error:
 :     Variable not in scope: t :: ([a0] -> a0) -> [a1]
 * Ejercicio 2
@@ -47,7 +54,7 @@ a. valorAbsoluto :: Float → Float, que dado un número devuelve su valor absol
    valorAbsoluto (-7)
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : 7
 
 b. bisiesto :: Int → Bool, que dado un número que representa un año, indica si el mismo es bisiesto.
@@ -65,7 +72,7 @@ b. bisiesto :: Int → Bool, que dado un número que representa un año, indica 
   bisiesto 400
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : True
 : False
 : False
@@ -83,7 +90,7 @@ c. factorial :: Int → Int, definida únicamente para enteros positivos, que co
     factorial 3
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : 2
 : 6
 d. cantDivisoresPrimos :: Int → Int, que dado un entero positivo devuelve la cantidad de divisores primos.
@@ -114,6 +121,7 @@ d. cantDivisoresPrimos :: Int → Int, que dado un entero positivo devuelve la c
 
 #+END_SRC
 
+*RESULTS:*
 #+begin_src haskell
 2
 2
