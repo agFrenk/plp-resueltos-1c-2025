@@ -20,7 +20,7 @@
 Dar el tipo y describir el comportamiento de las siguientes funciones del módulo Prelude de Haskell:
 
 null head tail init last take drop (++) concat reverse elem
-** null
+null)
 #+BEGIN_SRC haskell :results output
   main = print (:t null)
 #+END_SRC
@@ -28,7 +28,7 @@ null head tail init last take drop (++) concat reverse elem
 #+RESULTS:
 : <interactive>:3:16: error:
 :     Variable not in scope: t :: (t0 a0 -> Bool) -> [a1]
-** haed
+head)
 #+BEGIN_SRC haskell :results output
   print (:t head)
 #+END_SRC
@@ -39,7 +39,6 @@ null head tail init last take drop (++) concat reverse elem
 * Ejercicio 2
 Definir las siguientes funciones:
 a. valorAbsoluto :: Float → Float, que dado un número devuelve su valor absoluto.
-d. cantDivisoresPrimos :: Int → Int, que dado un entero positivo devuelve la cantidad de divisores primos.
 
 #+BEGIN_SRC haskell :results output
    -- Función valorAbsoluto: devuelve el valor absoluto de un número.
@@ -87,13 +86,38 @@ c. factorial :: Int → Int, definida únicamente para enteros positivos, que co
 #+RESULTS:
 : 2
 : 6
-
-#+BEGIN_SRC haskell :results output
+d. cantDivisoresPrimos :: Int → Int, que dado un entero positivo devuelve la cantidad de divisores primos.
+#+BEGIN_SRC haskell :results output code
   -- Función cantDivisoresPrimos: cuenta la cantidad de divisores primos de un entero positivo.
   :{
-  cantDivisoresPrimos1 :: Int -> Int -> Int
-  cantDivisoresPrimos1 x y = if mod x y == 0
+
   cantDivisoresPrimos :: Int -> Int
-  cantDivisoresPrimos x = cantDivisoresPrimos1 x x
+  cantDivisoresPrimos x = iterarDivisores x x
+
+  iterarDivisores:: Int -> Int -> Int
+  iterarDivisores _ 1 = 0
+  iterarDivisores x 2 = if mod x 2 == 0 then 1 else 0
+  iterarDivisores x y = if mod x y == 0 && (esPrimo y) then (iterarDivisores x (y-1)) + 1 else (iterarDivisores x (y-1))
+
+  esPrimo :: Int -> Bool
+  esPrimo x = if x < 2 then False else esPrimoRecursivo x (x - 1)
+
+  esPrimoRecursivo:: Int -> Int -> Bool
+  esPrimoRecursivo _ 1 = True
+  esPrimoRecursivo x y = if (mod x y == 0) then False else esPrimoRecursivo x (y-1)
+
   :}
+  cantDivisoresPrimos 4141
+  cantDivisoresPrimos 100
+  cantDivisoresPrimos 42
+  cantDivisoresPrimos 7
+
 #+END_SRC
+
+#+RESULTS:
+#+begin_src haskell
+2
+2
+3
+1
+#+end_src
