@@ -3,6 +3,7 @@
 #+BEGIN_SRC emacs-lisp
   (load-file "../funcionesUtiles.el")
 #+END_SRC
+
 ** Ejericio1
 
 
@@ -20,7 +21,7 @@ max2 (x, y)
   max2 (2, 4)
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : 4.0
 
 normaVectorial (x, y)
@@ -32,7 +33,7 @@ normaVectorial (x, y)
   normaVectorial (2, 2)
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : 2.828427
 
 subtract
@@ -44,7 +45,7 @@ subtract
   subtract 8 2
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : -6.0
 
 predecesor
@@ -60,7 +61,7 @@ predecesor
   predecesor 8
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : 7.0
 
 
@@ -82,7 +83,7 @@ evaluarEnCero
     evaluarEnCero(predecesor)
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : -1.0
 
 dosVeces
@@ -98,7 +99,7 @@ dosVeces
    dosVeces sumarDos 5
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : 9.0
 
 flipAll = map flip
@@ -110,7 +111,7 @@ flipAll = map flip
   :}
    #+END_SRC
 
-   #+RESULTS:
+   *RESULTS:*
 
 
 
@@ -124,7 +125,7 @@ flipRaro = flip flip
   :}
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 
 ii. Indicar cuáles de las funciones anteriores no están curricadas. Para cada una de ellas, denir la función
 curricada correspondiente. Recordar dar el tipo de la función.
