@@ -1,46 +1,46 @@
 * Guia 1
 ** funciones utiles
 #+BEGIN_SRC emacs-lisp
-    (defun replace-results-line ()
-      "Reemplaza '#+RESULTS:' por '*RESULTS:*' en el buffer actual."
-      (interactive)
-      (save-excursion
-        (goto-char (point-min))
-        (while (search-forward "#+RESULTS:" nil t)
-          (replace-match "*RESULTS:*" nil nil))))
+      (defun replace-results-line ()
+        "Reemplaza '#+RESULTS:' por '*RESULTS:*' en el buffer actual."
+        (interactive)
+        (save-excursion
+          (goto-char (point-min))
+          (while (search-forward "#+RESULTS:" nil t)
+            (replace-match "*RESULTS:*" nil nil))))
 
-    (defun my-org-block-strip-leading-whitespace ()
-    "Elimina espacios y tabulaciones al inicio de cada línea en el bloque Org actual.
-  Se busca el bloque Org en el que está el cursor y, si se encuentra, se eliminan
-  todos los espacios y tabulaciones que preceden a cualquier otro carácter en cada línea."
+      (defun my-org-block-strip-leading-whitespace ()
+      "Elimina espacios y tabulaciones al inicio de cada línea en el bloque Org actual.
+    Se busca el bloque Org en el que está el cursor y, si se encuentra, se eliminan
+    todos los espacios y tabulaciones que preceden a cualquier otro carácter en cada línea."
+      (interactive)
+      (let* ((element (org-element-at-point))
+             (beg (org-element-property :begin element))
+             (end (org-element-property :end element)))
+        (if (and beg end)
+            (save-excursion
+              (goto-char beg)
+              (while (re-search-forward "^[ \t]+" end t)
+                (replace-match "")))
+          (message "No se encontró un bloque Org en el punto."))))
+    (defun my-org-block-hindent-indent ()
+    "Llama a `my-org-block-strip-leading-whitespace`, activa `hindent-mode` y luego,
+  para cada línea del bloque Org actual, simula la pulsación de TAB con `indent-for-tab-command`."
     (interactive)
+    ;; Primero elimina los espacios y tabs al inicio de cada línea en el bloque.
+    (my-org-block-strip-leading-whitespace)
+    ;; Activa hindent-mode.
+    (hindent-mode 1)
     (let* ((element (org-element-at-point))
            (beg (org-element-property :begin element))
            (end (org-element-property :end element)))
       (if (and beg end)
           (save-excursion
             (goto-char beg)
-            (while (re-search-forward "^[ \t]+" end t)
-              (replace-match "")))
+            (while (< (point) end)
+              (indent-for-tab-command)
+              (forward-line 1)))
         (message "No se encontró un bloque Org en el punto."))))
-  (defun my-org-block-hindent-indent ()
-  "Llama a `my-org-block-strip-leading-whitespace`, activa `hindent-mode` y luego,
-para cada línea del bloque Org actual, simula la pulsación de TAB con `indent-for-tab-command`."
-  (interactive)
-  ;; Primero elimina los espacios y tabs al inicio de cada línea en el bloque.
-  (my-org-block-strip-leading-whitespace)
-  ;; Activa hindent-mode.
-  (hindent-mode 1)
-  (let* ((element (org-element-at-point))
-         (beg (org-element-property :begin element))
-         (end (org-element-property :end element)))
-    (if (and beg end)
-        (save-excursion
-          (goto-char beg)
-          (while (< (point) end)
-            (indent-for-tab-command)
-            (forward-line 1)))
-      (message "No se encontró un bloque Org en el punto."))))
 
 
 
@@ -204,8 +204,8 @@ iii. Se podría definir una función curry^n, que tome una función de un númer
 devuelva su versión currificada?
 *Sugerencia*: pensar cuál sería el tipo de la función
 ** Ejercicio 3
-i. Redefinir usando *foldr* las funciones *sum*, *elem*, *(++)*, *filter* y *map*.
-*** sum
+*** i. Redefinir usando *foldr* las funciones *sum*, *elem*, *(++)*, *filter* y *map*.
+**** sum
 #+begin_src haskell :results output
     :{
     sum:: Num b => [b] -> b
@@ -223,7 +223,7 @@ i. Redefinir usando *foldr* las funciones *sum*, *elem*, *(++)*, *filter* y *map
 
 #+RESULTS:
 : 6
-*** Elem
+**** Elem
 #+begin_src haskell :results output
 :{
 elem:: Eq a => a -> [a] -> Bool
@@ -248,7 +248,7 @@ elem 0 [8, 9]
 : True
 : True
 : False
-*** (++)
+**** (++)
 #+begin_src haskell :results output code
   :{
   (++):: [a] -> [a] -> [a]
@@ -269,7 +269,7 @@ elem 0 [8, 9]
 #+begin_src haskell
 [5,4,6,7]
 #+end_src
-*** filter
+**** filter
 
 #+begin_src haskell :results output code
 
@@ -290,7 +290,7 @@ elem 0 [8, 9]
 #+begin_src haskell
 [2,4]
 #+end_src
-*** Map
+**** Map
 #+begin_src haskell :results output
   :{
      map::
@@ -301,10 +301,11 @@ elem 0 [8, 9]
 #+RESULTS:
 : map :: (a -> b) -> [a] -> [b]
 
+*** ii
 ii. Definir la función mejorSegún :: (a -> a -> Bool) -> [a] -> a, que
 devuelve  el máximo elemento de la lista según una función de
 comparación, utilizando foldr1. Por ejemplo, maximum = mejorSegún (>).
-*** MejorSegun
+**** MejorSegun
 #+begin_src haskell :results output code
      :{
       mejorSegun :: (a -> a -> Bool) -> [a] -> a
@@ -339,12 +340,14 @@ comparación, utilizando foldr1. Por ejemplo, maximum = mejorSegún (>).
 88
 #+end_src
 
-
+*** TODO iii
 iii. Definir la función sumasParciales :: Num a => [a] -> [a], que dada una lista de números devuelve
 otra de la misma longitud, que tiene en cada posición la suma parcial de los elementos de la lista original
 desde la cabeza hasta la posición actual. Por ejemplo, sumasParciales
 [1,4,-1,0,5] ; [1,5,4,4,9].
+
 #+begin_src haskell :results output code
+  :t foldr
   :{
   sumasParciales :: Num a => [a] -> [a]
   sumasParciales [x] = [x]
@@ -359,37 +362,91 @@ desde la cabeza hasta la posición actual. Por ejemplo, sumasParciales
     sumasParciales1 :: Num a => [a] -> [a]
     sumasParciales1 xs = sumasParciales1' 0 xs
      where
-     sumasParciales1' = foldr (\acc (y:res) -> [acc+y] ++ res) []
+     sumasParciales1' = foldl (\(acc, xs) y -> (acc + y, xs:(acc+y) )) (0,[])
   :}
-  sumasParciales [1,4,-1,0,5]
+  sumasParciales1 [1,4,-1,0,5]
 
 #+end_src
 
 #+RESULTS:
 #+begin_src haskell
-<interactive>:15:24-44: error:
+foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
+<interactive>:16:24-44: error:
     • Couldn't match expected type: [a] -> [a]
-                  with actual type: [a0]
+                  with actual type: ([a0], [a0])
     • The function ‘sumasParciales1'’
       is applied to two value arguments,
-        but its type ‘t0 a0 -> [a0]’ has only one
+        but its type ‘t0 [a0] -> ([a0], [a0])’ has only one
       In the expression: sumasParciales1' 0 xs
       In an equation for ‘sumasParciales1’:
           sumasParciales1 xs
             = sumasParciales1' 0 xs
             where
-                sumasParciales1' = foldr (\ acc (y : res) -> [...] ++ res) []
+                sumasParciales1'
+                  = foldl (\ (acc, xs) y -> (acc + y, xs : (acc + y))) (0, [])
     • Relevant bindings include
-        xs :: [a] (bound at <interactive>:15:19)
-        sumasParciales1 :: [a] -> [a] (bound at <interactive>:15:3)
-[1,5,4,4,9]
+        xs :: [a] (bound at <interactive>:16:19)
+        sumasParciales1 :: [a] -> [a] (bound at <interactive>:16:3)
+
+<interactive>:18:56-57: error:
+    • Couldn't match expected type ‘a1’ with actual type ‘[a1]’
+      ‘a1’ is a rigid type variable bound by
+        the inferred type of sumasParciales1' :: t [a1] -> ([a1], [a1])
+        at <interactive>:18:4-75
+    • In the first argument of ‘(:)’, namely ‘xs’
+      In the expression: xs : (acc + y)
+      In the expression: (acc + y, xs : (acc + y))
+    • Relevant bindings include
+        y :: [a1] (bound at <interactive>:18:41)
+        xs :: [a1] (bound at <interactive>:18:37)
+        acc :: [a1] (bound at <interactive>:18:32)
+        sumasParciales1' :: t [a1] -> ([a1], [a1])
+          (bound at <interactive>:18:4)
+<interactive>:20:1-15: error:
+    • Variable not in scope: sumasParciales1 :: [a0] -> t
+    • Perhaps you meant ‘sumasParciales’ (line 6)
 #+end_src
 
-
-iv. Denir la función sumaAlt, que realiza la suma alternada de los elementos de una lista. Es decir, da como
+*** iv
+iv. Definir la función sumaAlt, que realiza la suma alternada de los elementos de una lista. Es decir, da como
 resultado: el primer elemento, menos el segundo, más el tercero, menos el cuarto, etc. Usar foldr.
-v. Hacer lo mismo que en el punto anterior, pero en sentido inverso (el último elemento menos el anteúltimo,
-etc.). Pensar qué esquema de recursión conviene usar en este caso.
+*** v
+v. Hacer lo mismo que en el punto anterior, pero en sentido inverso
+(el último elemento menos el anteúltimo, etc.). Pensar qué esquema de
+recursión conviene usar en este caso.
+
+** Ejercicio 4
+*** i.
+Definir la función permutaciones :: [a] -> [[a]], que dada una lista
+devuelve todas sus permutacines. Se recomienda utilizar concatMap ::
+(a -> [b]) -> [a] -> [b], y también take y drop.
+#+begin_src haskell :results output code
+  :{
+  listaDeIndices :: Int -> [Int]
+  listaDeIndices 0 = [0]
+  listaDeIndices i =  listaDeIndices (i-1) ++ [i]
+  :}
+
+
+  :{
+  permutaciones :: [a] -> [[a]]
+  permutaciones [] = [[]]
+  permutaciones xs =
+    concatMap (\n ->
+                   let elemento = xs !! n
+                       resto    = take n xs ++ drop (n + 1) xs
+                   in map (elemento :) (permutaciones resto)
+                ) [0 .. length xs - 1]
+
+  :}
+permutaciones (listaDeIndices 2)
+#+end_src
+
+#+RESULTS:
+#+begin_src haskell
+[[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]]
+#+end_src
+
 ** Ejercicio 6
 *** a
 Definir la función sacarUna :: Eq a => a -> [a] -> [a], que dados un
