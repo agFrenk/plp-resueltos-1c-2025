@@ -733,16 +733,30 @@ si la entrada es una lista de N listas, todas de longitud M , la
 salida debe tener M listas, todas de longitud N.
 
 ~trasponer :: [[Int]] -> [[Int]]~
+
 #+begin_src haskell :results output
-  :{
+:{
 transpuesta :: [[a]] -> [[a]]
 transpuesta [] = []
 transpuesta ([]:_) = []
 transpuesta xs = map head xs : transpuesta (map tail xs)
 
-  :}
+:}
 transpuesta [[1,2,3,4], [5,6,7,8]]
 #+end_src
 
 #+RESULTS:
 : [[1,5],[2,6],[3,7],[4,8]]
+
+*evaluacion de funciones para entender la implementacion:*
+#+begin_src haskell :results output
+
+   map tail [[1,2,3, 4], [5,6,7, 8]]
+   map head [[1,2,3, 4], [5,6,7, 8]]
+
+
+#+end_src
+
+#+RESULTS:
+: [[2,3,4],[6,7,8]]
+: [1,5]
