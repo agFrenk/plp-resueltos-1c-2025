@@ -177,7 +177,8 @@ flipRaro = flip flip
 ii. Indicar cuáles de las funciones anteriores no están curricadas. Para cada una de ellas, denir la función
 curricada correspondiente. Recordar dar el tipo de la función.
 ** Ejercicio 2
-i. Definir la función curry, que dada una función de dos argumentos,
+*** i.
+Definir la función curry, que dada una función de dos argumentos,
 devuelve su equivalente currificada.
 
 #+BEGIN_SRC haskell :results output
@@ -191,8 +192,10 @@ devuelve su equivalente currificada.
 
 #+END_SRC
 
-ii. Dfnir la función uncurry, que dada una función curricada de dos argumentos, devuelve su versión no
-curricada equivalente. Es la inversa de la anterior.
+*** ii.
+Defnir la función uncurry, que dada una función currificada de dos
+argumentos, devuelve su versión no currificada equivalente. Es la
+inversa de la anterior
 #+begin_src haskell :results output
   {:
   uncurry :: (a -> b -> c) -> (a,b) -> c
@@ -439,19 +442,130 @@ devuelve todas sus permutacines. Se recomienda utilizar concatMap ::
                 ) [0 .. length xs - 1]
 
   :}
-permutaciones (listaDeIndices 2)
+permutaciones [8, 10, 99]
 #+end_src
 
 #+RESULTS:
 #+begin_src haskell
-[[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]]
+[[8,10,99],[8,99,10],[10,8,99],[10,99,8],[99,8,10],[99,10,8]]
 #+end_src
+*** ii
+i. Definir la función partes, que recibe una lista L y devuelve la
+lista de todas las listas formadas por los mismos elementos de L, en
+su mismo orden de aparición.
+
+#+begin_src haskell :results output code
+  :{
+   partes :: [a] -> [[a]]
+   partes [] = [[]]
+   partes xs = (map (head xs:)  (partes (tail xs))) ++ (partes (tail xs))
+  :}
+
+   partes [5,2,1]
+
+#+end_src
+
+
+#+RESULTS:
+#+begin_src haskell
+[[5,2,1],[5,2],[5,1],[5],[2,1],[2],[1],[]]
+#+end_src
+*** iii
+Definir la función prefijos, que dada una lista, devuelve todos sus
+prfijos.
+#+begin_src haskell :results output code
+  :{
+   prefijos :: [a] -> [[a]]
+   prefijos [a] = [[a]]
+   prefijos xs = map (\n ->
+                   take n xs
+                ) [0 .. length xs]
+  :}
+prefijos [1, 2, 3,4]
+#+end_src
+
+#+RESULTS:
+#+begin_src haskell
+[[],[1],[1,2],[1,2,3],[1,2,3,4]]
+#+end_src
+
+*** iv
+ Definir la función sublistas que, dada una lista, devuelve todas sus
+ sublistas (listas de elementos que aparecen consecutivos en la lista
+ original).
+
+ #+begin_src haskell :results output
+:{
+prefijos :: [a] -> [[a]]
+prefijos [a] = [[a]]
+prefijos xs = map (\n -> take n xs) [1 .. length xs]
+
+sublistas :: [a] -> [[a]]
+sublistas [] = [[]]
+sublistas xs = (prefijos xs) ++ sublistas (tail xs)
+:}
+sublistas [1, 2, 3, 4]
+
+
+#+end_src
+
+#+RESULTS:
+: [[1],[1,2],[1,2,3],[1,2,3,4],[2],[2,3],[2,3,4],[3],[3,4],[4],[]]
+
+
+
+** TODO Ejercicio 5
+siderar las siguientes funciones:
+#+begin_src haskell :results output
+:{
+  elementosEnPosicionesPares :: [a] -> [a]
+  elementosEnPosicionesPares [] = []
+  elementosEnPosicionesPares (x:xs) = if null xs
+                                      then [x]
+                                      else x : elementosEnPosicionesPares (tail xs)
+:}
+
+#+end_src
+
+#+begin_src haskell :results output
+  :{
+  entrelazar :: [a] -> [a] -> [a]
+  entrelazar [] = id
+  entrelazar (x:xs) = \ys -> if null ys
+                             then x : entrelazar xs []
+                             else x : head ys : entrelazar xs (tail ys)
+  :}
+
+#+end_src
+
+
+
+Indicar si la recursión utilizada en cada una de ellas es o no
+estructural. Si lo es, reescribirla utilizando foldr. En caso
+contrario, explicar el motivo.
+
+#+begin_src haskell :results output
+:{
+  elementosEnPosicionesPares :: [a] -> [a]
+  elementosEnPosicionesPares [] = []
+  elementosEnPosicionesPares (x:xs) = if null xs
+                                      then [x]
+                                      else x : elementosEnPosicionesPares (tail xs)
+:}
+
+#+end_src
+
+Para ver si hay induccion en la estructura de xs, basta ver:
+1. Caso base, P([]).
+2. Caso inductivo, ∀x :: a. ∀xs :: [a]. (P(xs) ⇒ P(x : xs)).
+
+
 
 ** Ejercicio 6
 *** a
 Definir la función sacarUna :: Eq a => a -> [a] -> [a], que dados un
-elemento y una lista devuelve el resultado de eliminar de la lista la primera aparición del elemento(si
-está presente).
+elemento y una lista devuelve el resultado de eliminar de la lista la
+primera aparición del elemento(si está presente).
 #+begin_src haskell :results output code
     :{
     sacarUna:: Eq a => a -> [a] -> [a]
@@ -460,13 +574,175 @@ está presente).
     :}
 
     :{
-    recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
-    recr f z [] = z
-    recr f z (x : xs) = f x xs (recr f z xs)
+   recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+   recr f z [] = z
+   recr f z (x : xs) = f x xs (recr f z xs)
 
     sacarUnaR:: Eq a => a -> [a] -> [a]
     sacarUnaR a = recr (\x xs resc ->  if (a == x) then xs else x:resc) []
     :}
-  --  sum 0 [1, 2, 3]
+  sum 0 [1, 2, 3]
 
 #+end_src
+*** b
+Explicar por qué el esquema de recursión estructural (foldr) no es
+adecuado para implementar la función sacarUna del punto anterior
+*** c
+Definr la función insertarOrdenado :: Ord a => a -> [a] -> [a] que
+inserta un elemento en una lista ordenada (de manera creciente), de
+manera que se preserva el ordenamiento.
+#+begin_src haskell :results output
+  :{
+   insertarOrdenado :: Ord a => a -> [a] -> [a]
+   insertarOrdenado a [] = [a]
+   insertarOrdenado a (x:xs) = if a < x then [a] ++ [x] ++ xs else x:insertarOrdenado a xs
+  :}
+
+  :{
+   recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+   recr f z [] = z
+   recr f z (x : xs) = f x xs (recr f z xs)
+
+   insertarOrdenadoR :: Ord a => a -> [a] -> [a]
+   insertarOrdenadoR a = recr (\x xs res -> if (a < x) then a:x:xs else x:res) [a]
+  :}
+    insertarOrdenadoR 3 [1,2,4,5]
+    insertarOrdenadoR 6 [1,2,4,5]
+#+end_src
+
+#+RESULTS:
+: [1,2,3,4,5]
+: [1,2,4,5,6]
+** Ejercicio 7
+Definir las siguientes funciones para trabajar sobre listas, y dar su
+tipo. Todas ellas deben poder aplicarse a listas finitas e infinitas.
+*** i
+mapPares, una versión de map que toma una función currificada de dos
+argumentos y una lista de pares de valores, y devuelve la lista de
+aplicaciones de la función a cada par. Pista: recordar curry y
+uncurry.
+
+#+BEGIN_SRC haskell :results output
+  :{
+  curry :: ((a,b) -> c) -> a -> b -> c
+  curry f x y = f (x,y)
+  :}
+
+#+END_SRC
+
+#+begin_src haskell :results output
+  {:
+  uncurry :: (a -> b -> c) -> (a,b) -> c
+  uncurry f = \(x,y) -> f x y
+  }:
+#+end_src
+
+#+begin_src haskell :results output code
+  :{
+    uncurry :: (a -> b -> c) -> (a,b) -> c
+    uncurry f = \(x,y) -> f x y
+
+    mapPares :: (a -> b -> c) -> [(a, b)] -> [c]
+    mapPares f xs = map (uncurry f) xs
+  :}
+
+ mapPares (+) [(1,2), (8,9)]
+#+end_src
+
+#+RESULTS:
+#+begin_src haskell
+[3,17]
+#+end_src
+
+
+*** ii
+armarPares, que dadas dos listas arma una lista de pares que contiene,
+en cada posición, el elemento correspondiente a esa posición en cada
+una de las listas. Si una de las listas es más larga que la otra,
+ignorar los elementos que sobran (el resultado tendrá la longitud de
+la lista más corta). Esta función en Haskell se llama zip. Pista:
+aprovechar la currificación y utilizar evaluación parcial.
+
+#+begin_src haskell :results output
+  :{
+    armarPares :: [a] -> [b] -> [(a,b)]
+    armarPares _ [] = []
+    armarPares [] _ = []
+    armarPares xs ys = [(head xs, head ys)] ++ (armarPares (tail xs) (tail ys))
+  :}
+armarPares [2,3,4,6,7] [6,7,7,8,9,04,34,6,7]
+#+end_src
+
+#+RESULTS:
+: [(2,6),(3,7),(4,7),(6,8),(7,9)]
+
+
+*** iii.
+mapDoble, una variante de mapPares, que toma una función currificada
+de dos argumentos y dos listas (de igual longitud), y devuelve una
+lista de aplicaciones de la función a cada elemento correspondiente de
+las dos listas. Esta función en Haskell se llama zipWith.
+#+begin_src haskell :results output
+  :{
+   mapDoble :: (a -> b -> c) -> [a] -> [b] -> [c]
+   mapDoble _ [] _ = []
+   mapDoble _ _ [] = []
+   mapDoble f xs ys = f (head xs) (head ys) : mapDoble f (tail xs) (tail ys)
+  :}
+mapDoble (+) [1,2,3] [1,2,3,4]
+#+end_src
+
+#+RESULTS:
+: [2,4,6]
+
+
+** Ejercicio 8
+*** i.
+Escribir la función sumaMat, que representa la suma de matrices,
+usando ~zipWith~. Representaremos una matriz como la lista de sus
+filas. Esto quiere decir que cada matriz será una lista finita de
+listas fiitas, todas de la misma longitud, con elementos
+enteros. Recordamos que la suma de matrices se define como la suma
+celda a celda. Asumir que las dos matrices a sumar están bien formadas
+y tienen las mismas dimensiones.
+
+~sumaMat :: [[Int]] -> [[Int]] -> [[Int]]~
+#+begin_src haskell :results output code
+  :{
+   sumaMat :: [[Int]] -> [[Int]] -> [[Int]]
+   sumaMat _ [] = []
+   sumaMat [] _ = []
+   sumaMat a b = zipWith (+) (head a) (head b) : sumaMat (tail a) (tail b)
+  :}
+
+   sumaMat [[1,2],[2,4]] [[9, 8],[8, 6]]
+#+end_src
+
+#+RESULTS:
+#+begin_src haskell
+[[10,10],[10,10]]
+#+end_src
+
+
+
+*** ii.
+Escribir la función trasponer, que, dada una matriz como las del ítem
+i, devuelva su traspuesta. Es decir, en la posición i, j del resultado
+está el contenido de la posición j, i de la matriz original. Notar que
+si la entrada es una lista de N listas, todas de longitud M , la
+salida debe tener M listas, todas de longitud N.
+
+~trasponer :: [[Int]] -> [[Int]]~
+#+begin_src haskell :results output
+  :{
+transpuesta :: [[a]] -> [[a]]
+transpuesta [] = []
+transpuesta ([]:_) = []
+transpuesta xs = map head xs : transpuesta (map tail xs)
+
+  :}
+transpuesta [[1,2,3,4], [5,6,7,8]]
+#+end_src
+
+#+RESULTS:
+: [[1,5],[2,6],[3,7],[4,8]]
