@@ -2,11 +2,11 @@
 ** funciones utiles
 #+BEGIN_SRC emacs-lisp
       (defun replace-results-line ()
-        "Reemplaza '#+RESULTS:' por '*RESULTS:*' en el buffer actual."
+        "Reemplaza '*RESULTS:*' por '*RESULTS:*' en el buffer actual."
         (interactive)
         (save-excursion
           (goto-char (point-min))
-          (while (search-forward "#+RESULTS:" nil t)
+          (while (search-forward "*RESULTS:*" nil t)
             (replace-match "*RESULTS:*" nil nil))))
 
       (defun my-org-block-strip-leading-whitespace ()
@@ -47,7 +47,7 @@
 
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : my-org-block-hindent-indent
 
 ** Ejericio1
@@ -67,7 +67,7 @@ max2 (x, y)
   max2 (2, 4)
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : 4.0
 
 
@@ -80,7 +80,7 @@ normaVectorial (x, y)
   normaVectorial (2, 2)
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : 2.828427
 
 subtract
@@ -224,7 +224,7 @@ devuelva su versión currificada?
 
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 : 6
 **** Elem
 #+begin_src haskell :results output
@@ -247,7 +247,7 @@ elemF 7 [8, 9]
 elem 0 [8, 9]
 #+end_sr
 
-#+RESULTS:
+*RESULTS:*
 : True
 : True
 : False
@@ -268,7 +268,7 @@ elem 0 [8, 9]
 
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src haskell
 [5,4,6,7]
 #+end_src
@@ -289,7 +289,7 @@ elem 0 [8, 9]
 
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src haskell
 [2,4]
 #+end_src
@@ -301,7 +301,7 @@ elem 0 [8, 9]
 
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 : map :: (a -> b) -> [a] -> [b]
 
 *** ii
@@ -337,7 +337,7 @@ comparación, utilizando foldr1. Por ejemplo, maximum = mejorSegún (>).
 
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src haskell
 10
 88
@@ -371,7 +371,7 @@ desde la cabeza hasta la posición actual. Por ejemplo, sumasParciales
 
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src haskell
 foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
 <interactive>:16:24-44: error:
@@ -445,7 +445,7 @@ devuelve todas sus permutacines. Se recomienda utilizar concatMap ::
 permutaciones [8, 10, 99]
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src haskell
 [[8,10,99],[8,99,10],[10,8,99],[10,99,8],[99,8,10],[99,10,8]]
 #+end_src
@@ -466,7 +466,7 @@ su mismo orden de aparición.
 #+end_src
 
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src haskell
 [[5,2,1],[5,2],[5,1],[5],[2,1],[2],[1],[]]
 #+end_src
@@ -484,7 +484,7 @@ prfijos.
 prefijos [1, 2, 3,4]
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src haskell
 [[],[1],[1,2],[1,2,3],[1,2,3,4]]
 #+end_src
@@ -509,7 +509,7 @@ sublistas [1, 2, 3, 4]
 
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 : [[1],[1,2],[1,2,3],[1,2,3,4],[2],[2,3],[2,3,4],[3],[3,4],[4],[]]
 
 
@@ -610,7 +610,7 @@ manera que se preserva el ordenamiento.
     insertarOrdenadoR 6 [1,2,4,5]
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 : [1,2,3,4,5]
 : [1,2,4,5,6]
 ** Ejercicio 7
@@ -629,6 +629,9 @@ uncurry.
   :}
 
 #+END_SRC
+
+*RESULTS:*
+: my-org-block-hindent-indent
 
 #+begin_src haskell :results output
   {:
@@ -649,7 +652,7 @@ uncurry.
  mapPares (+) [(1,2), (8,9)]
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src haskell
 [3,17]
 #+end_src
@@ -673,7 +676,7 @@ aprovechar la currificación y utilizar evaluación parcial.
 armarPares [2,3,4,6,7] [6,7,7,8,9,04,34,6,7]
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 : [(2,6),(3,7),(4,7),(6,8),(7,9)]
 
 
@@ -692,7 +695,7 @@ las dos listas. Esta función en Haskell se llama zipWith.
 mapDoble (+) [1,2,3] [1,2,3,4]
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 : [2,4,6]
 
 
@@ -718,7 +721,7 @@ y tienen las mismas dimensiones.
    sumaMat [[1,2],[2,4]] [[9, 8],[8, 6]]
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src haskell
 [[10,10],[10,10]]
 #+end_src
@@ -745,18 +748,15 @@ transpuesta xs = map head xs : transpuesta (map tail xs)
 transpuesta [[1,2,3,4], [5,6,7,8]]
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 : [[1,5],[2,6],[3,7],[4,8]]
 
 *evaluacion de funciones para entender la implementacion:*
 #+begin_src haskell :results output
-
    map tail [[1,2,3, 4], [5,6,7, 8]]
    map head [[1,2,3, 4], [5,6,7, 8]]
-
-
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 : [[2,3,4],[6,7,8]]
 : [1,5]
