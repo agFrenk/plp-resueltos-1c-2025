@@ -6,7 +6,7 @@
         (interactive)
         (save-excursion
           (goto-char (point-min))
-          (while (search-forward "#+RESULTS:" nil t)
+          (while (search-forward "*RESULTS:*" nil t)
             (replace-match "*RESULTS:*" nil nil))))
 
       (defun my-org-block-strip-leading-whitespace ()
@@ -47,7 +47,7 @@
 
 #+END_SRC
 
-#+RESULTS:
+*RESULTS:*
 : my-org-block-hindent-indent
 
 *RESULTS:*
@@ -780,7 +780,7 @@ definida sólo para los enteros mayores o iguales que 0)
 
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src haskell
 #+end_src
 
@@ -800,7 +800,7 @@ Utilizando foldNat, denir la función potencia.
   potencia 4 2
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 : 16
 
 ** Ejercicio 10
@@ -834,7 +834,7 @@ genListaR 1 (\x -> x+1) 5
 
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 #+begin_src
 [1,2,3,4,5]
 [1,2,3,4,5]
@@ -868,6 +868,6 @@ números consecutivos desde el primero hasta el segundo
 
 #+end_src
 
-#+RESULTS:
+*RESULTS:*
 : [1,2,3,4,5,6,7,8,9,10]
 : [1,2,3,4,5,6,7,8,9,10]
